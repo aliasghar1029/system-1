@@ -1,0 +1,2004 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDI Daily Report Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f9f0 0%, #e8f5e9 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2d8659 0%, #1e5631 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tabs button {
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid #2d8659;
+            color: #2d8659;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .nav-tabs button.active {
+            background: #2d8659;
+            color: white;
+        }
+
+        .nav-tabs button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(45, 134, 89, 0.2);
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h3 {
+            color: #2d8659;
+            margin-bottom: 15px;
+            font-size: 18px;
+            border-bottom: 2px solid #e8f5e9;
+            padding-bottom: 10px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1e5631;
+        }
+
+        input,
+        textarea,
+        select {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #2d8659;
+            box-shadow: 0 0 0 3px rgba(45, 134, 89, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .info-box {
+            background: #f0f9f0;
+            border-left: 4px solid #2d8659;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .info-box p {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .calculation-result {
+            background: linear-gradient(135deg, #e8f5e9 0%, #f0f9f0 100%);
+            border: 2px solid #2d8659;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .calculation-result h4 {
+            color: #2d8659;
+            margin-bottom: 12px;
+        }
+
+        .formula-display {
+            background: white;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            border-left: 3px solid #2d8659;
+        }
+
+        .sdi-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1e5631;
+            margin: 15px 0;
+        }
+
+        .error-msg {
+            color: #d32f2f;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #2d8659;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1e5631;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(45, 134, 89, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e8f5e9;
+            color: #2d8659;
+            border: 1px solid #2d8659;
+        }
+
+        .btn-secondary:hover {
+            background: #d4edda;
+        }
+
+        .btn-danger {
+            background: #d32f2f;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #b71c1c;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal-content h2 {
+            color: #2d8659;
+            margin-bottom: 20px;
+        }
+
+        .modal-content .form-group {
+            margin-bottom: 20px;
+        }
+
+        .modal-content button {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        /* Reminder Modal */
+        .reminder-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .reminder-modal.active {
+            display: flex;
+        }
+
+        .reminder-content {
+            background: linear-gradient(135deg, #2d8659 0%, #1e5631 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: slideIn 0.3s ease;
+            border: 3px solid #ff9800;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .reminder-content h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #ffeb3b;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .reminder-content p {
+            font-size: 16px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            opacity: 0.95;
+        }
+
+        .reminder-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .reminder-buttons button {
+            padding: 15px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-silence {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-silence:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-reason {
+            background: #ff9800;
+            color: white;
+            font-weight: 700;
+        }
+
+        .btn-reason:hover {
+            background: #f57c00;
+            transform: scale(1.05);
+        }
+
+        .reason-section {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .reason-section.show {
+            display: block;
+        }
+
+        .reason-section textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: inherit;
+            background: white;
+            color: #333;
+        }
+
+        .reason-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .reason-buttons button {
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-submit-reason {
+            background: #388e3c;
+            color: white;
+        }
+
+        .btn-submit-reason:hover {
+            background: #2e7d32;
+        }
+
+        .btn-cancel-reason {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid white;
+        }
+
+        .btn-cancel-reason:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Warning Modal */
+        .warning-modal {
+            display: none;
+            position: fixed;
+            z-index: 2100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .warning-modal.active {
+            display: flex;
+        }
+
+        .warning-content {
+            background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: shake 0.5s ease;
+            border: 3px solid #ffeb3b;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-10px);
+            }
+
+            75% {
+                transform: translateX(10px);
+            }
+        }
+
+        .warning-content h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #ffeb3b;
+        }
+
+        .warning-content p {
+            font-size: 16px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .member-item {
+            background: #f9f9f9;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid #2d8659;
+        }
+
+        .member-item button {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .skip-records {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+
+        .skip-item {
+            background: white;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            border-left: 3px solid #ffc107;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .storage-status {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .storage-status.inactive {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 24px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .reminder-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+
+            body,
+            .container,
+            header,
+            .nav-tabs,
+            .button-group,
+            .modal {
+                background: white !important;
+                padding: 0 !important;
+            }
+
+            .nav-tabs,
+            .button-group {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal active">
+        <div class="modal-content">
+            <h2>🔐 SDI Check System</h2>
+            <p style="margin-bottom: 20px; color: #666; font-size: 14px;">Please sign in to continue</p>
+            <div class="form-group">
+                <label for="loginName">Name</label>
+                <input type="text" id="loginName" placeholder="Enter your name">
+            </div>
+            <div class="form-group">
+                <label for="loginDestination">Destination/Location</label>
+                <select id="loginDestination">
+                    <option value="">Select destination</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter password">
+            </div>
+            <button class="btn-primary" onclick="handleLogin()">Sign In</button>
+            <div class="info-box" style="margin-top: 15px;">
+                <strong>Demo Credentials:</strong><br>Name: Demo User<br>Destination: Main Plant<br>Password: demo123
+            </div>
+        </div>
+    </div>
+
+    <!-- Unauthorized Modal -->
+    <div id="unauthorizedModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color: #d32f2f; margin-bottom: 20px;">❌ Access Denied</h2>
+            <p style="margin-bottom: 20px; color: #666;">Invalid credentials. Please check your name, destination, and
+                password.</p>
+            <button class="btn-secondary" onclick="resetLogin()">Try Again</button>
+        </div>
+    </div>
+
+    <!-- Storage Selector Modal -->
+    <div id="storageModal" class="modal">
+        <div class="modal-content">
+            <h2>💾 Select Data Storage Folder</h2>
+            <p style="margin-bottom: 20px; color: #666; font-size: 14px;">Choose a folder on your PC to store all system
+                data.</p>
+            <button class="btn-primary" onclick="selectStorageFolder()">📁 Choose Folder</button>
+            <p style="margin-top: 20px; font-size: 12px; color: #999;">This folder will store all reports, user
+                accounts, and settings. You can share this folder to other PCs.</p>
+            <div id="storageStatus" style="margin-top: 20px;"></div>
+        </div>
+    </div>
+
+    <!-- SDI Reminder Modal -->
+    <div id="reminderModal" class="reminder-modal">
+        <div class="reminder-content">
+            <h2>⏰ SDI CHECK TIME!</h2>
+            <p>It's time to perform your daily SDI check!</p>
+            <p style="font-size: 14px; opacity: 0.8;">⏱️ Recommended time: 10:00 AM - 3:00 PM</p>
+
+            <div class="reminder-buttons">
+                <button class="btn-silence" onclick="silenceReminder()">🔇 Silence</button>
+                <button class="btn-reason" onclick="toggleReasonForm()">⏸️ Skip with Reason</button>
+            </div>
+
+            <div class="reason-section" id="reasonForm">
+                <div class="form-group">
+                    <label for="skipReason">Why are you unable to perform SDI check today?</label>
+                    <textarea id="skipReason"
+                        placeholder="e.g., Equipment maintenance, System shutdown, etc."></textarea>
+                </div>
+                <div class="reason-buttons">
+                    <button class="btn-submit-reason" onclick="submitSkipReason()">✓ Submit Reason</button>
+                    <button class="btn-cancel-reason" onclick="toggleReasonForm()">✕ Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Warning Modal -->
+    <div id="warningModal" class="warning-modal">
+        <div class="warning-content">
+            <h2>⚠️ WARNING</h2>
+            <p><strong>SDI Check Not Performed!</strong></p>
+            <p>You have not performed your daily SDI check today without providing a valid reason.</p>
+            <p style="font-size: 14px; color: #ffeb3b;">Please take responsibility and perform your SDI checks as
+                scheduled every day between 10:00 AM - 3:00 PM.</p>
+            <button class="btn-primary" style="background: white; color: #d32f2f; margin-top: 20px;"
+                onclick="closeWarningModal()">I Understand</button>
+        </div>
+    </div>
+
+    <div class="container" id="mainApp" style="display: none;">
+        <header>
+            <h1>SDI Daily Report Pro</h1>
+            <p class="subtitle">Advanced RO & EDI Plant Monitoring System</p>
+            <p style="font-size: 13px; margin-top: 10px;">📍 <span id="userDisplay"></span></p>
+            <button class="btn-secondary" style="margin-top: 15px; float: right;" onclick="handleLogout()">Sign
+                Out</button>
+        </header>
+
+        <div id="storageStatusContainer"></div>
+
+        <div class="nav-tabs">
+            <button class="active" onclick="switchTab('sdi-entry', this)">SDI Entry</button>
+            <button onclick="switchTab('search', this)">Search Reports</button>
+            <button onclick="switchTab('weekly', this)">Weekly Report</button>
+            <button onclick="switchTab('monthly', this)">Monthly Report</button>
+            <button onclick="switchTab('authorization', this)">Authorization</button>
+        </div>
+
+        <!-- SDI Entry Tab -->
+        <div id="sdi-entry" class="tab-content active">
+            <div class="form-section">
+                <h3>Test Date & Time</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="testDate">Date</label>
+                        <input type="date" id="testDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="testTime">Time</label>
+                        <input type="time" id="testTime">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>SDI Test Parameters</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="t1">T1 (Initial Time/Volume)</label>
+                        <input type="number" id="t1" placeholder="e.g., 100" step="0.01">
+                        <span class="error-msg" id="t1Error"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="t2">T2 (Final Time/Volume)</label>
+                        <input type="number" id="t2" placeholder="e.g., 75" step="0.01">
+                        <span class="error-msg" id="t2Error"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="testDuration">Test Duration (T) - Minutes</label>
+                        <input type="number" id="testDuration" placeholder="e.g., 15" step="0.1">
+                        <span class="error-msg" id="durationError"></span>
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="calculateSDI()">Calculate SDI</button>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div class="calculation-result">
+                    <h4>SDI Calculation Result</h4>
+                    <div class="formula-display">
+                        SDI = (100 × (1 − (T1 / T2))) ÷ T
+                    </div>
+                    <div class="formula-display">
+                        SDI = (100 × (1 − (<span id="formulaT1">0</span> / <span id="formulaT2">0</span>))) ÷ <span
+                            id="formulaT">0</span>
+                    </div>
+                    <div class="sdi-value">SDI: <span id="sdiValue">0</span></div>
+                </div>
+
+                <div class="info-box">
+                    <p><strong>What is SDI?</strong></p>
+                    <p style="margin-top: 8px;">SDI (Silt Density Index) measures the fouling potential of water passing
+                        through a membrane. A higher SDI indicates higher particulate/colloidal content which can foul
+                        membranes faster.</p>
+                </div>
+            </div>
+
+            <div class="form-section" id="locationSection" style="display: none;">
+                <h3>Location & Notes</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" placeholder="Enter location" value="Before Membrane">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="notes">Notes (Optional)</label>
+                        <textarea id="notes" placeholder="Add any relevant notes..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section" id="signatureSection" style="display: none;">
+                <h3>Signatures</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="inchargeSig">In-Charge Name/Signature</label>
+                        <input type="text" id="inchargeSig" placeholder="Sign here">
+                    </div>
+                    <div class="form-group">
+                        <label for="operatorSig">Operator Name/Signature</label>
+                        <input type="text" id="operatorSig" placeholder="Sign here">
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-primary"
+                        style="flex: 1; background: linear-gradient(135deg, #2d8659 0%, #1e5631 100%); padding: 15px; font-size: 16px; box-shadow: 0 4px 12px rgba(45, 134, 89, 0.3);"
+                        onclick="saveReport()">💾 Save Report</button>
+                    <button class="btn-secondary"
+                        style="flex: 1; padding: 15px; font-size: 16px; border: 2px solid #2d8659;"
+                        onclick="printCurrentReport()">🖨️ Print Report</button>
+                    <button class="btn-secondary"
+                        style="flex: 1; padding: 15px; font-size: 16px; border: 2px solid #2d8659; background: linear-gradient(135deg, #e8f5e9 0%, #d4edda 100%);"
+                        onclick="downloadCurrentReport()">⬇️ Download HTML</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Tab -->
+        <div id="search" class="tab-content">
+            <div class="form-section">
+                <h3>Search Saved Reports</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="searchType">Search By</label>
+                        <select id="searchType" onchange="updateSearchOptions()">
+                            <option value="date">Single Date</option>
+                            <option value="range">Date Range</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="searchDateGroup">
+                        <label for="searchDate">Date</label>
+                        <input type="date" id="searchDate">
+                    </div>
+                    <div class="form-group" id="searchStartGroup" style="display: none;">
+                        <label for="searchStart">Start Date</label>
+                        <input type="date" id="searchStart">
+                    </div>
+                    <div class="form-group" id="searchEndGroup" style="display: none;">
+                        <label for="searchEnd">End Date</label>
+                        <input type="date" id="searchEnd">
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="searchReports()">Search</button>
+            </div>
+
+            <div class="search-results" id="searchResults"></div>
+        </div>
+
+        <!-- Weekly Report Tab -->
+        <div id="weekly" class="tab-content">
+            <div class="form-section">
+                <h3>Generate Weekly SDI Report</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="weekDate">Select Week Starting</label>
+                        <input type="date" id="weekDate">
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="generateWeeklyReport()">Generate Report</button>
+            </div>
+            <div id="weeklyReportContent"></div>
+        </div>
+
+        <!-- Monthly Report Tab -->
+        <div id="monthly" class="tab-content">
+            <div class="form-section">
+                <h3>Generate Monthly SDI Report</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="monthDate">Select Month</label>
+                        <input type="month" id="monthDate">
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="generateMonthlyReport()">Generate Report</button>
+            </div>
+            <div id="monthlyReportContent"></div>
+        </div>
+
+        <!-- Authorization Tab (formerly Settings) -->
+        <div id="authorization" class="tab-content">
+            <div class="form-section">
+                <h3>👤 Manage User Accounts</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="accountName">Name</label>
+                        <input type="text" id="accountName" placeholder="Enter name">
+                    </div>
+                    <div class="form-group">
+                        <label for="accountDestination">Destination/Location</label>
+                        <input type="text" id="accountDestination" placeholder="e.g., Main Plant">
+                    </div>
+                    <div class="form-group">
+                        <label for="accountPassword">Password</label>
+                        <input type="password" id="accountPassword" placeholder="Enter password (min 4 chars)">
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="addUserAccount()">Add User Account</button>
+            </div>
+
+            <div class="form-section">
+                <h3>Current User Accounts</h3>
+                <div id="accountsList"></div>
+            </div>
+
+            <div class="form-section">
+                <h3>📍 Manage Destinations/Locations</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="destName">Destination Name</label>
+                        <input type="text" id="destName" placeholder="e.g., Main Plant, Branch A">
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="addDestination()">Add Destination</button>
+            </div>
+
+            <div class="form-section">
+                <h3>Available Destinations</h3>
+                <div id="destinationsList"></div>
+            </div>
+
+            <div class="form-section">
+                <h3>⏸️ Skip Records (Missing SDI Checks)</h3>
+                <div class="skip-records" id="skipRecordsList">
+                    <p style="color: #856404; font-size: 13px;">✅ No skip records yet. All daily checks are being
+                        performed!</p>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>💾 Data Storage & Backup</h3>
+                <div id="storageInfo"></div>
+                <button class="btn-primary" style="margin-top: 15px;" onclick="changeStorageFolder()">📁 Change Storage
+                    Folder</button>
+                <button class="btn-secondary" style="margin-top: 10px;" onclick="exportData()">📤 Export All
+                    Data</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let appData = {
+            users: [
+                { name: 'Demo User', destination: 'Main Plant', password: 'demo123' }
+            ],
+            destinations: ['Main Plant', 'Branch A', 'Pre-filter Station'],
+            reports: [],
+            skipRecords: [],
+            currentUser: null,
+            reminderShownToday: false,
+            warningShownToday: false
+        };
+
+        let dirHandle = null;
+        const STORAGE_FOLDER_NAME = 'sdi-system-data';
+
+        // Initialize
+        function initApp() {
+            setDefaultDateTime();
+            document.getElementById('searchDate').valueAsDate = new Date();
+            document.getElementById('weekDate').valueAsDate = new Date();
+            document.getElementById('monthDate').value = new Date().toISOString().slice(0, 7);
+        }
+
+        // Storage Functions
+        async function selectStorageFolder() {
+            try {
+                dirHandle = await window.showDirectoryPicker();
+                localStorage.setItem('storageFolderHandle', JSON.stringify(dirHandle));
+                await loadAppData();
+                showStorageStatus();
+                updateStorageDisplay();
+                alert('✓ Storage folder selected successfully!');
+            } catch (e) {
+                alert('Storage folder selection cancelled or not available');
+                console.log('Storage error:', e);
+            }
+        }
+
+        async function changeStorageFolder() {
+            await selectStorageFolder();
+        }
+
+        async function loadAppData() {
+            try {
+                if (dirHandle && 'showDirectoryPicker' in window) {
+                    const files = dirHandle.entries();
+                    for await (const entry of files) {
+                        if (entry[0] === 'sdi-appdata.json') {
+                            const file = await dirHandle.getFileHandle('sdi-appdata.json');
+                            const data = await file.getFile();
+                            const text = await data.text();
+                            const loaded = JSON.parse(text);
+                            appData = Object.assign(appData, loaded);
+                        }
+                    }
+                }
+            } catch (e) {
+                console.log('Using in-memory storage');
+            }
+        }
+
+        async function saveAppData() {
+            try {
+                if (dirHandle) {
+                    const fileHandle = await dirHandle.getFileHandle('sdi-appdata.json', { create: true });
+                    const writable = await fileHandle.createWritable();
+                    await writable.write(JSON.stringify(appData, null, 2));
+                    await writable.close();
+                }
+            } catch (e) {
+                console.log('Could not save to folder:', e);
+            }
+        }
+
+        function showStorageStatus() {
+            let statusHTML = '';
+            if (dirHandle) {
+                statusHTML = '<div class="storage-status"><strong>✓ Storage Connected:</strong> Data will be saved to your selected folder and can be shared with other PCs.</div>';
+            } else {
+                statusHTML = '<div class="storage-status inactive"><strong>ℹ️ Storage Not Connected:</strong> Data is stored in browser memory. To save data permanently, select a storage folder from Settings.</div>';
+            }
+            document.getElementById('storageStatusContainer').innerHTML = statusHTML;
+        }
+
+        function updateStorageDisplay() {
+            let info = '<strong>Current Storage:</strong> ';
+            if (dirHandle) {
+                info += 'Connected to local folder<br><small>Data automatically saves to your selected folder.</small>';
+            } else {
+                info += 'Browser Memory Only<br><small>Data will be lost if you close your browser. Select a folder to persist data.</small>';
+            }
+            document.getElementById('storageInfo').innerHTML = info;
+        }
+
+        function exportData() {
+            const dataStr = JSON.stringify(appData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'sdi-backup-' + new Date().toISOString().split('T')[0] + '.json';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            alert('✓ Data exported successfully!');
+        }
+
+        // Authentication
+        function handleLogin() {
+            const name = document.getElementById('loginName').value.trim();
+            const destination = document.getElementById('loginDestination').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!name || !destination || !password) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            const user = appData.users.find(function (u) {
+                return u.name === name && u.destination === destination && u.password === password;
+            });
+
+            if (user) {
+                appData.currentUser = { name: name, destination: destination };
+                appData.reminderShownToday = false;
+                appData.warningShownToday = false;
+                document.getElementById('loginModal').classList.remove('active');
+                document.getElementById('mainApp').style.display = 'block';
+                document.getElementById('userDisplay').textContent = '👤 ' + name + ' | 📍 ' + destination;
+                loadAccountsUI();
+                loadDestinationsUI();
+                loadSkipRecords();
+                showStorageStatus();
+                updateStorageDisplay();
+
+                setTimeout(checkSDIReminder, 500);
+                setInterval(checkSDIReminder, 60000);
+            } else {
+                document.getElementById('unauthorizedModal').classList.add('active');
+            }
+        }
+
+        function toggleCreateAccount() {
+            const modal = document.getElementById('createAccountModal');
+            modal.classList.toggle('active');
+        }
+
+        function createAccount() {
+            const name = document.getElementById('newName').value.trim();
+            const destination = document.getElementById('newDestination').value.trim();
+            const password = document.getElementById('newPassword').value.trim();
+
+            if (!name || !destination || !password) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            if (password.length < 4) {
+                alert('Password must be at least 4 characters');
+                return;
+            }
+
+            const exists = appData.users.find(function (u) {
+                return u.name === name && u.destination === destination;
+            });
+
+            if (exists) {
+                alert('This account already exists');
+                return;
+            }
+
+            if (!appData.destinations.includes(destination)) {
+                appData.destinations.push(destination);
+            }
+
+            appData.users.push({ name: name, destination: destination, password: password });
+            saveAppData();
+            alert('✓ Account created successfully!');
+
+            document.getElementById('newName').value = '';
+            document.getElementById('newDestination').value = '';
+            document.getElementById('newPassword').value = '';
+            toggleCreateAccount();
+            updateDestinationOptions();
+        }
+
+        function updateDestinationOptions() {
+            const select = document.getElementById('loginDestination');
+            select.innerHTML = '<option value="">Select destination</option>';
+            for (let i = 0; i < appData.destinations.length; i++) {
+                const opt = document.createElement('option');
+                opt.value = appData.destinations[i];
+                opt.text = appData.destinations[i];
+                select.appendChild(opt);
+            }
+        }
+
+        function handleLogout() {
+            appData.currentUser = null;
+            appData.reminderShownToday = false;
+            appData.warningShownToday = false;
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('loginModal').classList.add('active');
+            resetLogin();
+        }
+
+        function resetLogin() {
+            document.getElementById('unauthorizedModal').classList.remove('active');
+            document.getElementById('loginName').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('loginDestination').value = '';
+        }
+
+        // SDI Reminder
+        function checkSDIReminder() {
+            if (!appData.currentUser || appData.reminderShownToday) return;
+
+            const now = new Date();
+            const hour = now.getHours();
+            const today = now.toISOString().split('T')[0];
+
+            if (hour >= 10 && hour < 15) {
+                const todayReport = appData.reports.find(function (r) { return r.date === today; });
+                const todaySkip = appData.skipRecords.find(function (s) { return s.date === today; });
+
+                if (!todayReport && !todaySkip) {
+                    document.getElementById('reminderModal').classList.add('active');
+                    appData.reminderShownToday = true;
+                }
+            } else if (hour >= 15 && !appData.warningShownToday) {
+                const todayReport = appData.reports.find(function (r) { return r.date === today; });
+                const todaySkip = appData.skipRecords.find(function (s) { return s.date === today; });
+
+                if (!todayReport && !todaySkip) {
+                    document.getElementById('warningModal').classList.add('active');
+                    appData.warningShownToday = true;
+                }
+            }
+        }
+
+        function silenceReminder() {
+            document.getElementById('reminderModal').classList.remove('active');
+            document.getElementById('reasonForm').classList.remove('show');
+            document.getElementById('skipReason').value = '';
+        }
+
+        function toggleReasonForm() {
+            document.getElementById('reasonForm').classList.toggle('show');
+        }
+
+        function submitSkipReason() {
+            const reason = document.getElementById('skipReason').value.trim();
+            if (!reason) {
+                alert('Please enter a reason');
+                return;
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+            appData.skipRecords.push({
+                date: today,
+                reason: reason,
+                user: appData.currentUser.name,
+                destination: appData.currentUser.destination,
+                timestamp: new Date().toISOString()
+            });
+
+            saveAppData();
+            alert('✓ Skip record saved. Reason: "' + reason + '"');
+            silenceReminder();
+            loadSkipRecords();
+        }
+
+        function closeWarningModal() {
+            document.getElementById('warningModal').classList.remove('active');
+        }
+
+        // User Management
+        function addUserAccount() {
+            const name = document.getElementById('accountName').value.trim();
+            const destination = document.getElementById('accountDestination').value.trim();
+            const password = document.getElementById('accountPassword').value.trim();
+
+            if (!name || !destination || !password) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            if (password.length < 4) {
+                alert('Password must be at least 4 characters');
+                return;
+            }
+
+            const exists = appData.users.find(function (u) {
+                return u.name === name && u.destination === destination;
+            });
+
+            if (exists) {
+                alert('This account already exists');
+                return;
+            }
+
+            appData.users.push({ name: name, destination: destination, password: password });
+            saveAppData();
+            document.getElementById('accountName').value = '';
+            document.getElementById('accountDestination').value = '';
+            document.getElementById('accountPassword').value = '';
+            loadAccountsUI();
+            updateDestinationOptions();
+            alert('✓ Account added successfully!');
+        }
+
+        function removeAccount(name, destination) {
+            if (confirm('Remove account for ' + name + ' (' + destination + ')?')) {
+                appData.users = appData.users.filter(function (u) {
+                    return !(u.name === name && u.destination === destination);
+                });
+                saveAppData();
+                loadAccountsUI();
+            }
+        }
+
+        function loadAccountsUI() {
+            let html = '';
+            for (let i = 0; i < appData.users.length; i++) {
+                const u = appData.users[i];
+                html += '<div class="member-item">' +
+                    '<span><strong>👤 ' + u.name + '</strong><br><small>📍 ' + u.destination + '</small></span>' +
+                    '<button class="btn-danger" style="padding: 6px 12px; font-size: 12px;" onclick="removeAccount(\'' + u.name.replace(/'/g, "\\'") + '\', \'' + u.destination.replace(/'/g, "\\'") + '\')">Delete</button>' +
+                    '</div>';
+            }
+            document.getElementById('accountsList').innerHTML = html || '<p style="color: #999;">No accounts yet.</p>';
+        }
+
+        // Destination Management
+        function addDestination() {
+            const name = document.getElementById('destName').value.trim();
+            if (!name) {
+                alert('Please enter a destination name');
+                return;
+            }
+
+            if (appData.destinations.includes(name)) {
+                alert('This destination already exists');
+                return;
+            }
+
+            appData.destinations.push(name);
+            saveAppData();
+            document.getElementById('destName').value = '';
+            loadDestinationsUI();
+            updateDestinationOptions();
+            alert('✓ Destination added!');
+        }
+
+        function removeDestination(name) {
+            if (confirm('Remove destination "' + name + '"?')) {
+                appData.destinations = appData.destinations.filter(function (d) { return d !== name; });
+                saveAppData();
+                loadDestinationsUI();
+            }
+        }
+
+        function loadDestinationsUI() {
+            let html = '';
+            for (let i = 0; i < appData.destinations.length; i++) {
+                const d = appData.destinations[i];
+                html += '<div class="member-item">' +
+                    '<span><strong>📍 ' + d + '</strong></span>' +
+                    '<button class="btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="removeDestination(\'' + d.replace(/'/g, "\\'") + '\')">Remove</button>' +
+                    '</div>';
+            }
+            document.getElementById('destinationsList').innerHTML = html || '<p style="color: #999;">No destinations yet.</p>';
+        }
+
+        // Skip Records
+        function loadSkipRecords() {
+            if (appData.skipRecords.length === 0) {
+                document.getElementById('skipRecordsList').innerHTML = '<p style="color: #856404; font-size: 13px;">✅ No skip records yet. All daily checks are being performed!</p>';
+                return;
+            }
+
+            let html = '';
+            for (let i = appData.skipRecords.length - 1; i >= 0; i--) {
+                const skip = appData.skipRecords[i];
+                html += '<div class="skip-item">' +
+                    '<div>' +
+                    '<strong>📅 ' + skip.date + '</strong><br>' +
+                    '<small>⏸️ Reason: ' + skip.reason + '</small><br>' +
+                    '<small>👤 ' + skip.user + ' | 📍 ' + skip.destination + '</small>' +
+                    '</div>' +
+                    '<button class="btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="removeSkipRecord(\'' + skip.date + '\')">Remove</button>' +
+                    '</div>';
+            }
+            document.getElementById('skipRecordsList').innerHTML = html;
+        }
+
+        function removeSkipRecord(date) {
+            if (confirm('Remove skip record for ' + date + '?')) {
+                appData.skipRecords = appData.skipRecords.filter(function (s) { return s.date !== date; });
+                saveAppData();
+                loadSkipRecords();
+            }
+        }
+
+        // Tab Switching
+        function switchTab(tabName, btn) {
+            document.querySelectorAll('.tab-content').forEach(function (el) { el.classList.remove('active'); });
+            document.querySelectorAll('.nav-tabs button').forEach(function (el) { el.classList.remove('active'); });
+            document.getElementById(tabName).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        // SDI Calculation
+        function setDefaultDateTime() {
+            const now = new Date();
+            document.getElementById('testDate').valueAsDate = now;
+            document.getElementById('testTime').value = now.toTimeString().slice(0, 5);
+        }
+
+        function validateInputs() {
+            let valid = true;
+            document.getElementById('t1Error').textContent = '';
+            document.getElementById('t2Error').textContent = '';
+            document.getElementById('durationError').textContent = '';
+
+            const t1 = parseFloat(document.getElementById('t1').value);
+            const t2 = parseFloat(document.getElementById('t2').value);
+            const duration = parseFloat(document.getElementById('testDuration').value);
+
+            if (isNaN(t1) || t1 <= 0) {
+                document.getElementById('t1Error').textContent = 'T1 must be a positive number';
+                valid = false;
+            }
+
+            if (isNaN(t2) || t2 <= 0) {
+                document.getElementById('t2Error').textContent = 'T2 must be a positive number';
+                valid = false;
+            }
+
+            if (isNaN(duration) || duration <= 0) {
+                document.getElementById('durationError').textContent = 'Duration must be positive';
+                valid = false;
+            }
+
+            if (valid && t1 > t2) {
+                return confirm('Warning: T1 > T2. Continue?');
+            }
+
+            return valid;
+        }
+
+        function calculateSDI() {
+            if (!validateInputs()) return;
+
+            const t1 = parseFloat(document.getElementById('t1').value);
+            const t2 = parseFloat(document.getElementById('t2').value);
+            const t = parseFloat(document.getElementById('testDuration').value);
+            const sdi = (100 * (1 - (t1 / t2))) / t;
+
+            document.getElementById('formulaT1').textContent = t1;
+            document.getElementById('formulaT2').textContent = t2;
+            document.getElementById('formulaT').textContent = t;
+            document.getElementById('sdiValue').textContent = sdi.toFixed(2);
+
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('locationSection').style.display = 'block';
+            document.getElementById('signatureSection').style.display = 'block';
+        }
+
+        function saveReport() {
+            if (!validateInputs()) return;
+
+            const t1 = parseFloat(document.getElementById('t1').value);
+            const t2 = parseFloat(document.getElementById('t2').value);
+            const t = parseFloat(document.getElementById('testDuration').value);
+            const sdi = (100 * (1 - (t1 / t2))) / t;
+
+            const report = {
+                id: Date.now(),
+                date: document.getElementById('testDate').value,
+                time: document.getElementById('testTime').value,
+                t1: t1,
+                t2: t2,
+                t: t,
+                sdi: sdi,
+                location: document.getElementById('location').value,
+                notes: document.getElementById('notes').value,
+                inchargeSig: document.getElementById('inchargeSig').value,
+                operatorSig: document.getElementById('operatorSig').value,
+                author: appData.currentUser.name,
+                destination: appData.currentUser.destination,
+                timestamp: new Date().toISOString()
+            };
+
+            appData.reports.push(report);
+            appData.skipRecords = appData.skipRecords.filter(function (s) { return s.date !== report.date; });
+            saveAppData();
+
+            alert('✓ Report saved! SDI: ' + sdi.toFixed(2));
+            clearForm();
+
+            if (document.getElementById('reminderModal').classList.contains('active')) {
+                silenceReminder();
+            }
+        }
+
+        function clearForm() {
+            document.getElementById('t1').value = '';
+            document.getElementById('t2').value = '';
+            document.getElementById('testDuration').value = '';
+            document.getElementById('location').value = 'Before Membrane';
+            document.getElementById('notes').value = '';
+            document.getElementById('inchargeSig').value = '';
+            document.getElementById('operatorSig').value = '';
+            document.getElementById('resultSection').style.display = 'none';
+            document.getElementById('locationSection').style.display = 'none';
+            document.getElementById('signatureSection').style.display = 'none';
+            setDefaultDateTime();
+        }
+
+        function buildReportHTML(report) {
+            const inchargeSig = report.inchargeSig || '_______________';
+            const operatorSig = report.operatorSig || '_______________';
+            const notes = report.notes || '';
+
+            return '<div style="padding: 40px; font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto;">' +
+                '<div style="text-align: center; margin-bottom: 30px; border-bottom: 3px solid #2d8659; padding-bottom: 20px;">' +
+                '<h1 style="color: #2d8659; margin: 0; font-size: 28px;">SDI Daily Report</h1>' +
+                '<p style="margin: 10px 0 5px 0; color: #666; font-size: 14px;">RO & EDI Plant Monitoring System</p>' +
+                '</div>' +
+                '<table style="width: 100%; margin-bottom: 20px; border-collapse: collapse;">' +
+                '<tr><td style="padding: 8px; width: 25%;"><strong>Date:</strong> ' + report.date + '</td>' +
+                '<td style="padding: 8px; width: 25%;"><strong>Time:</strong> ' + report.time + '</td>' +
+                '<td style="padding: 8px; width: 25%;"><strong>Destination:</strong> ' + report.destination + '</td>' +
+                '<td style="padding: 8px;"><strong>Location:</strong> ' + report.location + '</td></tr>' +
+                '<tr><td colspan="4" style="padding: 8px;"><strong>Author:</strong> ' + report.author + '</td></tr>' +
+                '</table>' +
+                '<div style="background: #f0f9f0; padding: 20px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #2d8659;">' +
+                '<h3 style="color: #2d8659; margin-top: 0; margin-bottom: 15px;">Test Parameters</h3>' +
+                '<table style="width: 100%; border-collapse: collapse;">' +
+                '<tr><td style="padding: 8px; width: 33%;"><strong>T1:</strong> ' + report.t1 + '</td>' +
+                '<td style="padding: 8px; width: 33%;"><strong>T2:</strong> ' + report.t2 + '</td>' +
+                '<td style="padding: 8px;"><strong>Duration:</strong> ' + report.t + ' min</td></tr>' +
+                '</table></div>' +
+                '<div style="background: #e8f5e9; padding: 20px; border-radius: 6px; margin-bottom: 20px; border: 2px solid #2d8659;">' +
+                '<h3 style="color: #2d8659; margin-top: 0; margin-bottom: 10px;">SDI Calculation</h3>' +
+                '<p style="font-family: Courier New, monospace; margin: 10px 0; font-size: 13px;">SDI = (100 × (1 − (' + report.t1 + ' / ' + report.t2 + '))) ÷ ' + report.t + '</p>' +
+                '<p style="font-size: 18px; font-weight: bold; color: #1e5631; margin: 15px 0;">SDI Value: ' + report.sdi.toFixed(2) + '</p>' +
+                '</div>' +
+                (notes ? '<div style="margin-bottom: 20px;"><strong>Notes:</strong><p style="margin: 8px 0; padding: 10px; background: #f9f9f9; border-radius: 4px;">' + notes + '</p></div>' : '') +
+                '<div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e8f5e9;">' +
+                '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">' +
+                '<div style="text-align: center;"><p style="margin-bottom: 40px; font-weight: 600;">In-Charge Signature</p><div style="border-top: 2px solid #333; padding-top: 8px;"><p style="margin: 0; font-size: 12px;">' + inchargeSig + '</p></div></div>' +
+                '<div style="text-align: center;"><p style="margin-bottom: 40px; font-weight: 600;">Operator Signature</p><div style="border-top: 2px solid #333; padding-top: 8px;"><p style="margin: 0; font-size: 12px;">' + operatorSig + '</p></div></div>' +
+                '</div></div>' +
+                '<div style="margin-top: 40px; padding: 20px; background: #f0f9f0; border-radius: 6px; border-left: 4px solid #2d8659;">' +
+                '<h4 style="color: #2d8659; margin-top: 0;">What is SDI?</h4>' +
+                '<p style="margin: 10px 0; font-size: 14px; line-height: 1.5;">' +
+                'SDI (Silt Density Index) is a measure of the fouling potential of water passing through a membrane filtration system. ' +
+                'It indicates the level of suspended solids, colloids, and other particulate matter in the water that can foul or clog membranes. ' +
+                'A lower SDI value indicates cleaner water with less fouling potential, while a higher SDI suggests the water requires more pretreatment before membrane filtration.' +
+                '</p>' +
+                '<p style="margin: 10px 0; font-size: 14px; line-height: 1.5;">' +
+                '<strong>Why we check SDI:</strong> Regular SDI monitoring helps prevent membrane fouling, extends membrane life, ' +
+                'maintains system efficiency, and ensures consistent water quality in RO and EDI systems.' +
+                '</p>' +
+                '</div>' +
+                '<div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 11px; color: #999;">' +
+                '<p>Generated: ' + new Date(report.timestamp).toLocaleString() + '</p>' +
+                '<p>Report ID: ' + report.id + '</p></div></div>';
+        }
+
+        function printCurrentReport() {
+            const t1 = document.getElementById('t1').value;
+            if (!t1) {
+                alert('Please calculate SDI first');
+                return;
+            }
+
+            const report = {
+                date: document.getElementById('testDate').value,
+                time: document.getElementById('testTime').value,
+                t1: parseFloat(t1),
+                t2: parseFloat(document.getElementById('t2').value),
+                t: parseFloat(document.getElementById('testDuration').value),
+                sdi: parseFloat(document.getElementById('sdiValue').textContent),
+                location: document.getElementById('location').value,
+                notes: document.getElementById('notes').value,
+                inchargeSig: document.getElementById('inchargeSig').value,
+                operatorSig: document.getElementById('operatorSig').value,
+                author: appData.currentUser.name,
+                destination: appData.currentUser.destination,
+                timestamp: new Date().toISOString(),
+                id: 'temp'
+            };
+
+            const printWin = window.open('', '_blank');
+            if (!printWin) {
+                alert('Please allow pop-ups');
+                return;
+            }
+
+            printWin.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>SDI Report</title><style>body { font-family: Arial; margin: 0; padding: 20px; } button { padding: 10px 20px; margin: 10px; background: #2d8659; color: white; border: none; border-radius: 4px; cursor: pointer; } @media print { button { display: none; } }</style></head><body>');
+            printWin.document.write('<div style="margin-bottom: 20px;"><button onclick="window.print()">🖨️ Print</button> <button onclick="window.close()">Close</button></div>');
+            printWin.document.write(buildReportHTML(report));
+            printWin.document.write('</body></html>');
+            printWin.document.close();
+        }
+
+        function downloadCurrentReport() {
+            const t1 = document.getElementById('t1').value;
+            if (!t1) {
+                alert('Please calculate SDI first');
+                return;
+            }
+
+            const report = {
+                date: document.getElementById('testDate').value,
+                time: document.getElementById('testTime').value,
+                t1: parseFloat(t1),
+                t2: parseFloat(document.getElementById('t2').value),
+                t: parseFloat(document.getElementById('testDuration').value),
+                sdi: parseFloat(document.getElementById('sdiValue').textContent),
+                location: document.getElementById('location').value,
+                notes: document.getElementById('notes').value,
+                inchargeSig: document.getElementById('inchargeSig').value,
+                operatorSig: document.getElementById('operatorSig').value,
+                author: appData.currentUser.name,
+                destination: appData.currentUser.destination,
+                timestamp: new Date().toISOString(),
+                id: Date.now()
+            };
+
+            const html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>SDI Report</title><style>body { font-family: Arial; margin: 20px; }</style></head><body>' + buildReportHTML(report) + '</body></html>';
+
+            try {
+                const blob = new Blob([html], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'SDI_Report_' + report.date + '_' + report.id + '.html';
+                document.body.appendChild(link);
+                link.click();
+                setTimeout(function () {
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                }, 100);
+                alert('✓ Report downloaded!');
+            } catch (e) {
+                alert('Error: ' + e.message);
+            }
+        }
+
+        // Search
+        function updateSearchOptions() {
+            const type = document.getElementById('searchType').value;
+            document.getElementById('searchDateGroup').style.display = type === 'date' ? 'flex' : 'none';
+            document.getElementById('searchStartGroup').style.display = type === 'range' ? 'flex' : 'none';
+            document.getElementById('searchEndGroup').style.display = type === 'range' ? 'flex' : 'none';
+        }
+
+        function searchReports() {
+            const type = document.getElementById('searchType').value;
+            let filtered = [];
+
+            if (type === 'date') {
+                const searchDate = document.getElementById('searchDate').value;
+                filtered = appData.reports.filter(function (r) { return r.date === searchDate; });
+            } else if (type === 'range') {
+                const start = document.getElementById('searchStart').value;
+                const end = document.getElementById('searchEnd').value;
+                filtered = appData.reports.filter(function (r) { return r.date >= start && r.date <= end; });
+            } else if (type === 'week') {
+                const today = new Date();
+                const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+                filtered = appData.reports.filter(function (r) {
+                    const rDate = new Date(r.date);
+                    return rDate >= weekAgo && rDate <= today;
+                });
+            } else if (type === 'month') {
+                const now = new Date();
+                const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+                filtered = appData.reports.filter(function (r) {
+                    const rDate = new Date(r.date);
+                    return rDate >= monthStart && rDate <= now;
+                });
+            }
+
+            const resultsDiv = document.getElementById('searchResults');
+            if (filtered.length === 0) {
+                resultsDiv.innerHTML = '<p style="color: #999; text-align: center; padding: 20px;">No reports found.</p>';
+                return;
+            }
+
+            let html = '';
+            for (let i = 0; i < filtered.length; i++) {
+                const r = filtered[i];
+                html += '<div class="member-item" style="cursor: pointer;" onclick="viewReport(' + r.id + ')">' +
+                    '<div><strong>📅 ' + r.date + ' | ⏱️ ' + r.time + '</strong><br>' +
+                    '<small>📍 ' + r.destination + ' | SDI: ' + r.sdi.toFixed(2) + ' | 👤 ' + r.author + '</small></div>' +
+                    '<span style="color: #2d8659; cursor: pointer;">👁️ View</span></div>';
+            }
+            resultsDiv.innerHTML = html;
+        }
+
+        function viewReport(id) {
+            const report = appData.reports.find(function (r) { return r.id === id; });
+            if (!report) {
+                alert('Report not found');
+                return;
+            }
+
+            const printWin = window.open('', '_blank');
+            if (!printWin) {
+                alert('Please allow pop-ups');
+                return;
+            }
+
+            printWin.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>SDI Report</title><style>body { font-family: Arial; margin: 0; padding: 20px; } button { padding: 10px 20px; margin: 10px; background: #2d8659; color: white; border: none; border-radius: 4px; cursor: pointer; } @media print { button { display: none; } }</style></head><body>');
+            printWin.document.write('<div style="margin-bottom: 20px;"><button onclick="window.print()">🖨️ Print</button> <button onclick="window.close()">Close</button></div>');
+            printWin.document.write(buildReportHTML(report));
+            printWin.document.write('</body></html>');
+            printWin.document.close();
+        }
+
+        // Weekly Report
+        function generateWeeklyReport() {
+            const weekDate = new Date(document.getElementById('weekDate').value);
+            const weekStart = new Date(weekDate);
+            weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekEnd.getDate() + 6);
+
+            const filtered = appData.reports.filter(function (r) {
+                const rDate = new Date(r.date);
+                return rDate >= weekStart && rDate <= weekEnd;
+            });
+
+            if (filtered.length === 0) {
+                document.getElementById('weeklyReportContent').innerHTML = '<p style="color: #999; text-align: center; padding: 20px;">No reports for this week.</p>';
+                return;
+            }
+
+            const avgSDI = (filtered.reduce(function (sum, r) { return sum + r.sdi; }, 0) / filtered.length).toFixed(2);
+            const minSDI = Math.min.apply(null, filtered.map(function (r) { return r.sdi; })).toFixed(2);
+            const maxSDI = Math.max.apply(null, filtered.map(function (r) { return r.sdi; })).toFixed(2);
+
+            let tableRows = '';
+            for (let i = 0; i < filtered.length; i++) {
+                const r = filtered[i];
+                tableRows += '<tr><td style="padding: 10px; border: 1px solid #ddd;">' + r.date + '</td>' +
+                    '<td style="padding: 10px; border: 1px solid #ddd;">' + r.t1 + '</td>' +
+                    '<td style="padding: 10px; border: 1px solid #ddd;">' + r.t2 + '</td>' +
+                    '<td style="padding: 10px; border: 1px solid #ddd;">' + r.t + '</td>' +
+                    '<td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; color: #1e5631;">' + r.sdi.toFixed(2) + '</td></tr>';
+            }
+
+            const html = '<div style="background: white; padding: 40px; border-radius: 8px; margin-top: 20px; max-width: 100%;">' +
+                '<div style="text-align: center; margin-bottom: 30px; border-bottom: 3px solid #2d8659; padding-bottom: 20px;">' +
+                '<h1 style="color: #2d8659; margin: 0; font-size: 28px;">Weekly SDI Report</h1>' +
+                '<p style="margin: 10px 0 5px 0; color: #666; font-size: 14px;">RO & EDI Plant Monitoring System</p>' +
+                '<p style="margin: 5px 0; color: #666; font-size: 16px; font-weight: bold;">' + weekStart.toLocaleDateString() + ' to ' + weekEnd.toLocaleDateString() + '</p>' +
+                '</div>' +
+                '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 20px 0;">' +
+                '<div style="background: #f0f9f0; padding: 20px; border-radius: 6px; text-align: center; border: 1px solid #2d8659;"><div style="font-size: 12px; color: #666;">Total Tests</div><div style="font-size: 24px; font-weight: bold; color: #1e5631;">' + filtered.length + '</div></div>' +
+                '<div style="background: #f0f9f0; padding: 20px; border-radius: 6px; text-align: center; border: 1px solid #2d8659;"><div style="font-size: 12px; color: #666;">Average SDI</div><div style="font-size: 24px; font-weight: bold; color: #1e5631;">' + avgSDI + '</div></div>' +
+                '<div style="background: #f0f9f0; padding: 20px; border-radius: 6px; text-align: center; border: 1px solid #2d8659;"><div style="font-size: 12px; color: #666;">Min SDI</div><div style="font-size: 24px; font-weight: bold; color: #1e5631;">' + minSDI + '</div></div>' +
+                '<div style="background: #f0f9f0; padding: 20px; border-radius: 6px; text-align: center; border: 1px solid #2d8659;"><div style="font-size: 12px; color: #666;">Max SDI</div><div style="font-size: 24px; font-weight: bold; color: #1e5631;">' + maxSDI + '</div></div>' +
+                '</div>' +
+                '<h4 style="color: #2d8659;">Daily Entries</h4>' +
+                '<table style="width: 100%; border-collapse: collapse; margin-top: 10px;">' +
+                '<tr style="background: #e8f5e9;"><th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Date</th>' +
+                '<th style="padding: 10px; text-align: left; border: 1px solid #ddd;">T1</th>' +
+                '<th style="padding: 10px; text-align: left; border: 1px solid #ddd;">T2</th>' +
+                '<th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Duration</th>' +
+                '<th style="padding: 10px; text-align: left; border: 1px solid #ddd;">SDI</th></tr>' +
+                tableRows + '</table>' +
+                '<div style="margin-top: 20px; padding: 15px; background: #f0f9f0; border-radius: 6px; border-left: 4px solid #2d8659;">' +
+                '<strong>Summary:</strong> Average SDI is ' + avgSDI + '. ' + (avgSDI < 3 ? '✓ Water quality is good.' : avgSDI < 5 ? '⚠️ Water quality is moderate.' : '⚠️ Water quality requires attention.') +
+                '</div>' +
+                '<div style="margin-top: 40px; padding: 20px; background: #f0f9f0; border-radius: 6px; border-left: 4px solid #2d8659;">' +
+                '<h4 style="color: #2d8659; margin-top: 0;">What is SDI?</h4>' +
+                '<p style="margin: 10px 0; font-size: 14px; line-height: 1.5;">' +
+                'SDI (Silt Density Index) is a measure of the fouling potential of water passing through a membrane filtration system. ' +
+                'It indicates the level of suspended solids, colloids, and other particulate matter in the water that can foul or clog membranes. ' +
+                'A lower SDI value indicates cleaner water with less fouling potential, while a higher SDI suggests the water requires more pretreatment before membrane filtration.' +
+                '</p>' +
+                '<p style="margin: 10px 0; font-size: 14px; line-height: 1.5;">' +
+                '<strong>Why we check SDI:</strong> Regular SDI monitoring helps prevent membrane fouling, extends membrane life, ' +
+                'maintains system efficiency, and ensures consistent water quality in RO and EDI systems.' +
+                '</p>' +
+                '</div>' +
+                '<button class="btn-secondary" style="margin-top: 15px;" onclick="printWeeklyContent()">🖨️ Print</button>' +
+                '</div>';
+
+            document.getElementById('weeklyReportContent').innerHTML = html;
+        }
+
+        function printWeeklyContent() {
+            const content = document.getElementById('weeklyReportContent').innerHTML;
+            const printWin = window.open('', '_blank');
+            if (!printWin) {
+                alert('Please allow pop-ups');
+                return;
+            }
+            printWin.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Weekly Report</title><style>body { font-family: Arial; margin: 20px; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid #ddd; padding: 10px; } button { display: none; }</style></head><body>');
+            printWin.document.write(content);
+            printWin.document.write('</body></html>');
+            printWin.document.close();
+            setTimeout(function () { printWin.print(); }, 250);
+        }
+
+        // Monthly Report
+        function generateMonthlyReport() {
+            const monthStr = document.getElementById('monthDate').value;
+            const parts = monthStr.split('-');
+            const year = parseInt(parts[0]);
+            const month = parseInt(parts[1]);
+            const monthStart = new Date(year, month - 1, 1);
+            const monthEnd = new Date(year, month, 0);
+
+            const filtered = appData.reports.filter(function (r) {
+                const rDate = new Date(r.date);
+                return rDate >= monthStart && rDate <= monthEnd;
+            });
+
+            if (filtered.length === 0) {
+                document.getElementById('monthlyReportContent').innerHTML = '<p style="color: #999; text-align: center; padding: 20px;">No reports for this month.</p>';
+                return;
+            }
+
+            const avgSDI = (filtered.reduce(function (sum, r) { return sum + r.sdi; }, 0) / filtered.length).toFixed(2);
+            const minSDI = Math.min.apply(null, filtered.map(function (r) { return r.sdi; })).toFixed(2);
+            const maxSDI = Math.max.apply(null, filtered.map(function (r) { return r.sdi; })).toFixed(2);
+
+            let tableRows = '';
+            for (let i = 0; i < filtered.length; i++) {
+                const r = filtered[i];
+                tableRows += '<tr><td style="padding: 10px; border: 1px solid #ddd;">' + r.date + '</td>' +
+                    '<td style="padding: 10px; border: 1px solid #ddd;">' + r.t1 + '</td>' +
+                    '<td style="padding: 10px; border: 1px solid #ddd;">' + r.t2 + '</td>' +
+                    '<td style="padding: 10px; border: 1px solid #ddd;">' + r.t + '</td>' +
+                    '<td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; color: #1e5631;">' + r.sdi.toFixed(2) + '</td></tr>';
+            }
+
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+            const html = '<div style="background: white; padding: 40px; border-radius: 8px; margin-top: 20px; max-width: 100%;">' +
+                '<div style="text-align: center; margin-bottom: 30px; border-bottom: 3px solid #2d8659; padding-bottom: 20px;">' +
+                '<h1 style="color: #2d8659; margin: 0; font-size: 28px;">Monthly SDI Report</h1>' +
+                '<p style="margin: 10px 0 5px 0; color: #666; font-size: 14px;">RO & EDI Plant Monitoring System</p>' +
+                '<p style="margin: 5px 0; color: #666; font-size: 16px; font-weight: bold;">' + monthNames[month - 1] + ' ' + year + '</p>' +
+                '</div>' +
+                '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 20px 0;">' +
+                '<div style="background: #f0f9f0; padding: 20px; border-radius: 6px; text-align: center; border: 1px solid #2d8659;"><div style="font-size: 12px; color: #666;">Total Tests</div><div style="font-size: 24px; font-weight: bold; color: #1e5631;">' + filtered.length + '</div></div>' +
+                '<div style="background: #f0f9f0; padding: 20px; border-radius: 6px; text-align: center; border: 1px solid #2d8659;"><div style="font-size: 12px; color: #666;">Average SDI</div><div style="font-size: 24px; font-weight: bold; color: #1e5631;">' + avgSDI + '</div></div>' +
+                '<div style="background: #f0f9f0; padding: 20px; border-radius: 6px; text-align: center; border: 1px solid #2d8659;"><div style="font-size: 12px; color: #666;">Min SDI</div><div style="font-size: 24px; font-weight: bold; color: #1e5631;">' + minSDI + '</div></div>' +
+                '<div style="background: #f0f9f0; padding: 20px; border-radius: 6px; text-align: center; border: 1px solid #2d8659;"><div style="font-size: 12px; color: #666;">Max SDI</div><div style="font-size: 24px; font-weight: bold; color: #1e5631;">' + maxSDI + '</div></div>' +
+                '</div>' +
+                '<h4 style="color: #2d8659;">Daily Entries</h4>' +
+                '<table style="width: 100%; border-collapse: collapse; margin-top: 10px;">' +
+                '<tr style="background: #e8f5e9;"><th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Date</th>' +
+                '<th style="padding: 10px; text-align: left; border: 1px solid #ddd;">T1</th>' +
+                '<th style="padding: 10px; text-align: left; border: 1px solid #ddd;">T2</th>' +
+                '<th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Duration</th>' +
+                '<th style="padding: 10px; text-align: left; border: 1px solid #ddd;">SDI</th></tr>' +
+                tableRows + '</table>' +
+                '<div style="margin-top: 20px; padding: 15px; background: #f0f9f0; border-radius: 6px; border-left: 4px solid #2d8659;">' +
+                '<strong>Summary:</strong> Average SDI is ' + avgSDI + '. ' + (avgSDI < 3 ? '✓ Water quality is good.' : avgSDI < 5 ? '⚠️ Water quality is moderate.' : '⚠️ Water quality requires attention.') +
+                '</div>' +
+                '<div style="margin-top: 40px; padding: 20px; background: #f0f9f0; border-radius: 6px; border-left: 4px solid #2d8659;">' +
+                '<h4 style="color: #2d8659; margin-top: 0;">What is SDI?</h4>' +
+                '<p style="margin: 10px 0; font-size: 14px; line-height: 1.5;">' +
+                'SDI (Silt Density Index) is a measure of the fouling potential of water passing through a membrane filtration system. ' +
+                'It indicates the level of suspended solids, colloids, and other particulate matter in the water that can foul or clog membranes. ' +
+                'A lower SDI value indicates cleaner water with less fouling potential, while a higher SDI suggests the water requires more pretreatment before membrane filtration.' +
+                '</p>' +
+                '<p style="margin: 10px 0; font-size: 14px; line-height: 1.5;">' +
+                '<strong>Why we check SDI:</strong> Regular SDI monitoring helps prevent membrane fouling, extends membrane life, ' +
+                'maintains system efficiency, and ensures consistent water quality in RO and EDI systems.' +
+                '</p>' +
+                '</div>' +
+                '<button class="btn-secondary" style="margin-top: 15px;" onclick="printMonthlyContent()">🖨️ Print</button>' +
+                '</div>';
+
+            document.getElementById('monthlyReportContent').innerHTML = html;
+        }
+
+        function printMonthlyContent() {
+            const content = document.getElementById('monthlyReportContent').innerHTML;
+            const printWin = window.open('', '_blank');
+            if (!printWin) {
+                alert('Please allow pop-ups');
+                return;
+            }
+            printWin.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Monthly Report</title><style>body { font-family: Arial; margin: 20px; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid #ddd; padding: 10px; } button { display: none; }</style></head><body>');
+            printWin.document.write(content);
+            printWin.document.write('</body></html>');
+            printWin.document.close();
+            setTimeout(function () { printWin.print(); }, 250);
+        }
+
+        Initialize
+        window.addEventListener('load', function () {
+            initApp();
+            updateDestinationOptions();
+        });
+    // ... existing code ...
+
+                // Initialize
+                function initApp() {
+                    setDefaultDateTime();
+                document.getElementById('searchDate').valueAsDate = new Date();
+                document.getElementById('weekDate').valueAsDate = new Date();
+                document.getElementById('monthDate').value = new Date().toISOString().slice(0, 7);
+
+                // ✅ Yahaan add karo - destinations dropdown ko automatically update karo
+                updateDestinationOptions();
+    }
+
+                // Authentication
+                function handleLogin() {
+        const name = document.getElementById('loginName').value.trim();
+                const destination = document.getElementById('loginDestination').value;
+                const password = document.getElementById('loginPassword').value;
+
+                if (!name || !destination || !password) {
+                    alert('Please fill all fields');
+                return;
+        }
+
+                const user = appData.users.find(function(u) { 
+            return u.name === name && u.destination === destination && u.password === password; 
+        });
+
+                if (user) {
+                    appData.currentUser = { name: name, destination: destination };
+                appData.reminderShownToday = false;
+                appData.warningShownToday = false;
+                document.getElementById('loginModal').classList.remove('active');
+                document.getElementById('mainApp').style.display = 'block';
+                document.getElementById('userDisplay').textContent = '👤 ' + name + ' | 📍 ' + destination;
+                loadAccountsUI();
+                loadDestinationsUI();
+                loadSkipRecords();
+                showStorageStatus();
+                updateStorageDisplay();
+
+                // ✅ Yahaan bhi update karo login ke baad
+                updateDestinationOptions();
+
+                setTimeout(checkSDIReminder, 500);
+                setInterval(checkSDIReminder, 60000);
+        } else {
+                    document.getElementById('unauthorizedModal').classList.add('active');
+        }
+    }
+
+                // Destination Management
+                function addDestination() {
+        const name = document.getElementById('destName').value.trim();
+                if (!name) {
+                    alert('Please enter a destination name');
+                return;
+        }
+
+                if (appData.destinations.includes(name)) {
+                    alert('This destination already exists');
+                return;
+        }
+
+                appData.destinations.push(name);
+                saveAppData();
+                document.getElementById('destName').value = '';
+                loadDestinationsUI();
+
+                // ✅ Yahaan add karo - destination add karne ke baad dropdown update karo
+                updateDestinationOptions();
+
+                alert('✓ Destination added!');
+    }
+
+                function removeDestination(name) {
+        if (confirm('Remove destination "' + name + '"?')) {
+                    appData.destinations = appData.destinations.filter(function (d) { return d !== name; });
+                saveAppData();
+                loadDestinationsUI();
+
+                // ✅ Yahaan bhi update karo - destination remove karne ke baad
+                updateDestinationOptions();
+        }
+    }
+
+                // User Management
+                function addUserAccount() {
+        const name = document.getElementById('accountName').value.trim();
+                const destination = document.getElementById('accountDestination').value.trim();
+                const password = document.getElementById('accountPassword').value.trim();
+
+                if (!name || !destination || !password) {
+                    alert('Please fill all fields');
+                return;
+        }
+
+                if (password.length < 4) {
+                    alert('Password must be at least 4 characters');
+                return;
+        }
+
+                const exists = appData.users.find(function(u) { 
+            return u.name === name && u.destination === destination; 
+        });
+
+                if (exists) {
+                    alert('This account already exists');
+                return;
+        }
+
+                // ✅ Yahaan add karo - agar naya destination hai to destinations array mein add karo
+                if (!appData.destinations.includes(destination)) {
+                    appData.destinations.push(destination);
+        }
+
+                appData.users.push({name: name, destination: destination, password: password });
+                saveAppData();
+                document.getElementById('accountName').value = '';
+                document.getElementById('accountDestination').value = '';
+                document.getElementById('accountPassword').value = '';
+                loadAccountsUI();
+
+                // ✅ Yahaan update karo - user add karne ke baad dropdown update karo
+                updateDestinationOptions();
+
+                alert('✓ Account added successfully!');
+    }
+
+                // ✅ Yahaan function ko improve karo - clear karo aur phir populate karo
+                function updateDestinationOptions() {
+        const select = document.getElementById('loginDestination');
+
+                // Pehle existing options clear karo
+                select.innerHTML = '<option value="">Select destination</option>';
+
+                // Phir sabhi destinations ko add karo
+                for (let i = 0; i < appData.destinations.length; i++) {
+            const opt = document.createElement('option');
+                opt.value = appData.destinations[i];
+                opt.text = appData.destinations[i];
+                select.appendChild(opt);
+        }
+
+                console.log('Destinations updated:', appData.destinations); // Debugging ke liye
+    }
+
+                // ✅ Yahaan add karo - app data load hone ke baad automatically destinations update ho
+                async function loadAppData() {
+        try {
+            if (dirHandle && 'showDirectoryPicker' in window) {
+                const files = dirHandle.entries();
+                for await (const entry of files) {
+                    if (entry[0] === 'sdi-appdata.json') {
+                        const file = await dirHandle.getFileHandle('sdi-appdata.json');
+                const data = await file.getFile();
+                const text = await data.text();
+                const loaded = JSON.parse(text);
+                appData = Object.assign(appData, loaded);
+
+                // ✅ Yahaan add karo - data load hone ke baad destinations update karo
+                updateDestinationOptions();
+                    }
+                }
+            }
+        } catch(e) {
+                    console.log('Using in-memory storage');
+                // ✅ In-memory storage mein bhi destinations update karo
+                updateDestinationOptions();
+        }
+    }
+
+                // Initialize
+                window.addEventListener('load', function() {
+                    initApp();
+        // ✅ Yahaan double call se bachne ke liye initApp() mein hi updateDestinationOptions() call ho raha hai
+    });
+
+            // ... rest of the code ...
+    </script>
+</body>
+
+</html>
